@@ -1,10 +1,19 @@
+from wsgiref import headers
+
 import requests
 
 def analyze_repo(repo):
 
     url = f"https://api.github.com/repos/{repo}"
 
-    response = requests.get(url)
+    headers = {
+    "User-Agent": "GitHub-Repository-Analyzer"
+}
+
+    response = requests.get(url, headers=headers)
+
+    print("Status Code:", response.status_code)
+    print("Response:", response.text[:200])
 
     if response.status_code != 200:
         return None
@@ -40,7 +49,10 @@ def analyze_repo(repo):
     # Top Contributors
     contributors_url = data["contributors_url"]
 
-    contributors = requests.get(contributors_url).json()
+    contributors = requests.get(
+        contributors_url,
+        headers=headers
+    ).json()
 
     top_contributors = []
 
@@ -53,7 +65,7 @@ def analyze_repo(repo):
     # Languages
     languages_url = data["languages_url"]
 
-    languages = requests.get(languages_url).json()
+    languages = requests.get(languages_url, headers=headers).json()
 
     language_data = []
 
