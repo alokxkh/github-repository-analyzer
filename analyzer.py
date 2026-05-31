@@ -1,5 +1,4 @@
-from wsgiref import headers
-
+import os
 import requests
 
 def analyze_repo(repo):
@@ -7,8 +6,9 @@ def analyze_repo(repo):
     url = f"https://api.github.com/repos/{repo}"
 
     headers = {
-    "User-Agent": "GitHub-Repository-Analyzer"
-}
+    "User-Agent": "GitHub-Repository-Analyzer",
+    "Authorization": f"token {os.getenv('GITHUB_TOKEN')}"
+    }
 
     response = requests.get(url, headers=headers)
 
